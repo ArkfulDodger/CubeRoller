@@ -8,11 +8,12 @@ public class PlayerController : MonoBehaviour
 {
     private PlayerControls _playerInput;
     private Vector3 _defaultChildPosition = new Vector3(0f, 0.5f, 0f);
-    [SerializeField] private Vector2 _moveInput;
-    [SerializeField] private Vector3 _moveDirection;
+    private Vector2 _moveInput;
+    private Vector3 _moveDirection;
     [SerializeField] private Transform _pivotPoint;
+    private Vector3 _pivotAxis;
     [SerializeField] private GameObject _dice;
-    [SerializeField] private Vector3 _pivotAxis;
+    [SerializeField] private float _rollTime = 2f;
 
     private void Awake()
     {
@@ -24,10 +25,6 @@ public class PlayerController : MonoBehaviour
         _playerInput.Enable();
 
         _playerInput.CubeControl.Move.started += OnMoveInput;
-        //_playerInput.CubeControl.MoveNorth.started += OnMoveNorth;
-        //_playerInput.CubeControl.MoveSouth.started += OnMoveSouth;
-        //_playerInput.CubeControl.MoveEast.started += OnMoveEast;
-        //_playerInput.CubeControl.MoveWest.started += OnMoveWest;
     }
  
     private void OnDisable()
@@ -35,10 +32,6 @@ public class PlayerController : MonoBehaviour
         _playerInput.Disable();
 
         _playerInput.CubeControl.Move.started -= OnMoveInput;
-        //_playerInput.CubeControl.MoveNorth.started -= OnMoveNorth;
-        //_playerInput.CubeControl.MoveSouth.started -= OnMoveSouth;
-        //_playerInput.CubeControl.MoveEast.started -= OnMoveEast;
-        //_playerInput.CubeControl.MoveWest.started -= OnMoveWest;
     }
 
     private void OnMoveInput(InputAction.CallbackContext context)
@@ -76,14 +69,16 @@ public class PlayerController : MonoBehaviour
     private void Move(Vector3 move)
     {
         _pivotPoint.localPosition = move * 0.5f;
-        _pivotPoint.localRotation = Quaternion.LookRotation(move, Vector3.up);
         _pivotAxis = move.z != 0 ? Vector3.right : Vector3.forward;
-        float multiplier = (_moveInput.x > 0 || _moveInput.y < 0) ? -1f : 1f;
-        //transform.RotateAround(Vector3.zero, move, 90f);
-        Debug.Log("pivot world: " + _pivotPoint.rotation.eulerAngles);
-        _dice.transform.RotateAround(_pivotPoint.position, _pivotAxis, 90f * multiplier);
 
-        MovePlayerAndResetDicePosition();
+        StartCoroutine("RollToNextSide");
+
+
+        //_pivotPoint.localRotation = Quaternion.LookRotation(move, Vector3.up);
+        //float targetAngle = (_moveInput.x > 0 || _moveInput.y < 0) ? -90f : 90f;
+        //_dice.transform.RotateAround(_pivotPoint, _pivotAxis, targetAngle);
+
+        
     }
 
     private void MovePlayerAndResetDicePosition()
@@ -94,24 +89,32 @@ public class PlayerController : MonoBehaviour
     }
 
     
-    //private void OnMoveWest(InputAction.CallbackContext obj)
-    //{
-    //    throw new NotImplementedException();
-    //}
+    IEnumerator RollToNextSide()
+    {
+        _playerInput.Disable();
 
-    //private void OnMoveEast(InputAction.CallbackContext obj)
-    //{
-    //    throw new NotImplementedException();
-    //}
+        float multiplier = (_moveInput.x > 0 || _moveInput.y < 0) ? -1f : 1f;
 
-    //private void OnMoveSouth(InputAction.CallbackContext obj)
-    //{
-    //    throw new NotImplementedException();
-    //}
+        float angleProgress = 0f;
+        float time = 0f;
+        while( time < _rollTime)
+        {
+            float targetRotation = Mathf.Lerp(0f, 90f * multiplier, time / _rollTime);
+            float thisRotation = targetRotation - angleProgress;
+            _dice.transform.RotateAround(_pivotPoint.position, _pivotAxis, thisRotation);
 
-    //private void OnMoveNorth(InputAction.CallbackContext obj)
-    //{
-    //    throw new NotImplementedException();
-    //}
+            angleProgress = targetRotation;
+
+            yield return null;
+
+            time += Time.deltaTime;
+        }
+
+        float finalRotation = 90f * multiplier - angleProgress;
+        _dice.transform.RotateAround(_pivotPoint.position, _pivotAxis, finalRotation);
+        MovePlayerAndResetDicePosition();
+        _playerInput.Enable();
+        yield return null;
+    }
 
 }
