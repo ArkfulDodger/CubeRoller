@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 //public enum TileType
 //{
@@ -16,6 +17,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TypeMaterials _defaultTypeMats;
     public TypeMaterials DefaultTypeMats { get { return _defaultTypeMats; } }
     private int _levelHitsRemaining = 0;
+    private int _levelNum;
+    public int LevelNum { get { return _levelNum; } }
 
     public static GameManager Instance { get; private set; }
 
@@ -57,6 +60,7 @@ public class GameManager : MonoBehaviour
     private void GetCurrentLevel()
     {
         CurrentLevel = GameObject.FindGameObjectWithTag("Level").GetComponent<Level>();
+        _levelNum = SceneManager.GetActiveScene().buildIndex;
     }
 
     private void GetAndSetDice()

@@ -17,5 +17,8 @@ public class Tile : MonoBehaviour
             _goalIndicator.SetActive(true);
         else
             _goalIndicator.SetActive(false);
+
+        if (_isStart)
+            _type = TileType.Neutral;
     }
 }

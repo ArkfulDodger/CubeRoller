@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b71aa5fa793045848aded75e83f2c935, type: 3}
-  m_Name: 02DiceMap
+  m_Name: 03_DiceMap
   m_EditorClassIdentifier: 
   _side1Front: 0
   _side2Top: 0
