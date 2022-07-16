@@ -11,7 +11,13 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public Level CurrentLevel { get; private set; }
+    public Dice CurrentDice { get; private set; }
+    [SerializeField] private TypeMaterials _defaultTypeMats;
+    public TypeMaterials DefaultTypeMats { get { return _defaultTypeMats; } }
+
     public static GameManager Instance { get; private set; }
+
     private void Awake()
     {
         if (Instance == null)
@@ -23,16 +29,13 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        GetCurrentLevel();
     }
 
-    public Level CurrentLevel { get; private set; }
-    public Dice CurrentDice { get; private set; }
-    [SerializeField] private TypeMaterials _defaultTypeMats;
-    public TypeMaterials DefaultTypeMats { get { return _defaultTypeMats; } }
 
     private void Start()
     {
-        GetCurrentLevel();
         GetAndSetDice();
     }
 
