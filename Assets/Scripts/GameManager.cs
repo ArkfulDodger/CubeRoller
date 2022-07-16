@@ -33,6 +33,18 @@ public class GameManager : MonoBehaviour
         GetCurrentLevel();
     }
 
+    private void OnEnable()
+    {
+        EventManager.Instance.BadTileStep += OnBadTileStep;
+        EventManager.Instance.LevelCleared += OnLevelCleared;
+    }
+
+    private void OnDisable()
+    {
+        EventManager.Instance.BadTileStep -= OnBadTileStep;
+        EventManager.Instance.LevelCleared -= OnLevelCleared;
+    }
+
 
     private void Start()
     {
@@ -48,5 +60,15 @@ public class GameManager : MonoBehaviour
     {
         CurrentDice = GameObject.FindGameObjectWithTag("Dice").GetComponent<Dice>();
         CurrentDice.UpdateSideMapping();
+    }
+
+    private void OnBadTileStep()
+    {
+        Debug.Log("Hit Bad Tile!");
+    }
+
+    private void OnLevelCleared()
+    {
+        Debug.Log("Level Cleared!");
     }
 }

@@ -29,17 +29,18 @@ public class DiceSide : MonoBehaviour
     {
         Tile tile = other.GetComponent<TileTop>().Tile;
         TileType tileType = tile.Type;
+
         bool isMatch = tileType == Type;
         bool isNeutralSided = tileType == TileType.Neutral || Type == TileType.Neutral;
 
         // check for failure
         if (!isMatch && !isNeutralSided)
-            Debug.Log("No Match! Fail!");
+            EventManager.Instance.BadTileStepHandler();
         // chack for success
         else if (isMatch && tile.IsEnd)
-            Debug.Log("Success! Won Level!");
-        // confirm safe
-        else
-            Debug.Log("Safe");
+            EventManager.Instance.LevelClearedHandler();
+        //// confirm safe
+        //else
+        //    Debug.Log("Safe");
     }
 }
