@@ -63,7 +63,9 @@ public class PlayerController : MonoBehaviour
 
     private bool IsMoveAllowed(Vector3 move)
     {
-        return true;
+        // If tile exists in map at coordinates, move is allowed
+        Vector2 targetCoordinates = (transform.position + move).GetCoordinateFromPosition();
+        return GameManager.Instance.CurrentLevel.IsTileAtCoordinates(targetCoordinates);
     }
 
     private void Move(Vector3 move)
