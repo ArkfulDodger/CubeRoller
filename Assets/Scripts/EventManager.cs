@@ -20,6 +20,18 @@ public class EventManager : MonoBehaviour
         }
     }
 
+    // Level is Loading
+    public event Action LevelLoading;
+    public void LevelLoadingHandler() { LevelLoading?.Invoke(); }
+
+    // Level is Loaded
+    public event Action LevelLoaded;
+    public void LevelLoadedHandler() { LevelLoaded?.Invoke(); }
+
+    // Level is Reloaded
+    public event Action LevelReloaded;
+    public void LevelReloadedHandler() { LevelReloaded?.Invoke(); }
+    
     // Landed on mismatched tile
     public event Action BadTileStep;
     public void BadTileStepHandler() { BadTileStep?.Invoke(); }
@@ -27,6 +39,10 @@ public class EventManager : MonoBehaviour
     // Matched on End Tile
     public event Action LevelCleared;
     public void LevelClearedHandler() { LevelCleared?.Invoke(); }
+
+    // Lost Level
+    public event Action LevelFailed;
+    public void LevelFailedHandler() { LevelFailed?.Invoke(); }
 
 
 }

@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.Collections;
+using System;
 
 
 // TODO: make it so array of build names is retrieved on Awake or Start, so it can be referenced to confirm scene names prior to load
@@ -30,6 +31,18 @@ public class LevelManager : MonoBehaviour
         }
     }
 
+    private void OnEnable()
+    {
+        EventManager.Instance.LevelFailed += OnLevelFailed;
+        EventManager.Instance.LevelCleared += OnLevelCleared;
+    }
+
+    private void OnDisable()
+    {
+        EventManager.Instance.LevelFailed -= OnLevelFailed;
+        EventManager.Instance.LevelCleared -= OnLevelCleared;
+    }
+
     // Loads a new Scene
     public void LoadScene(string sceneName)
     {
@@ -50,6 +63,7 @@ public class LevelManager : MonoBehaviour
         // load the scene
         StartCoroutine("LoadSceneAsync", sceneName);
         _isSceneBeingLoaded = true;
+        EventManager.Instance.LevelLoadingHandler();
     }
 
     private bool IsSceneInBuild(string name)
@@ -67,6 +81,35 @@ public class LevelManager : MonoBehaviour
         }
 
         return false;
+    }
+
+    private void OnLevelFailed()
+    {
+        LoadScene(SceneManager.GetActiveScene().name);
+    }
+    
+    private void OnLevelCleared()
+    {
+        Scene currentScene = SceneManager.GetActiveScene();
+        int nextSceneIndex = currentScene.buildIndex + 1;
+
+        if (SceneManager.sceneCountInBuildSettings > nextSceneIndex)
+        {
+            string nextScenePath = SceneUtility.GetScenePathByBuildIndex(nextSceneIndex);
+            string nextSceneName = GetSceneNameFromScenePath(nextScenePath);
+            LoadScene(nextSceneName);
+        }
+        else
+            Debug.Log("No More Levels in Build.");
+    }
+
+    private string GetSceneNameFromScenePath(string scenePath)
+    {
+        // Unity's asset paths always use '/' as a path separator
+        var sceneNameStart = scenePath.LastIndexOf("/", StringComparison.Ordinal) + 1;
+        var sceneNameEnd = scenePath.LastIndexOf(".", StringComparison.Ordinal);
+        var sceneNameLength = sceneNameEnd - sceneNameStart;
+        return scenePath.Substring(sceneNameStart, sceneNameLength);
     }
 
     private IEnumerator LoadSceneAsync(string sceneName)
@@ -107,6 +150,7 @@ public class LevelManager : MonoBehaviour
 
         // hide loading canvas
         _loadingCanvas.SetActive(false);
+        EventManager.Instance.LevelLoadedHandler();
 
         yield return null;
     }

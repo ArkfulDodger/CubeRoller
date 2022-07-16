@@ -44,13 +44,18 @@ public class PlayerController : MonoBehaviour
 
         _playerInput.CubeControl.Move.started += OnMoveInput;
         _playerInput.CubeControl.Roll.started += OnRollInput;
+        EventManager.Instance.LevelLoading += OnLevelLoading;
+        EventManager.Instance.LevelLoaded += OnLevelLoaded;
     }
  
     private void OnDisable()
     {
         _playerInput.Disable();
 
+        _playerInput.CubeControl.Move.started -= OnMoveInput;
         _playerInput.CubeControl.Roll.started -= OnRollInput;
+        EventManager.Instance.LevelLoading -= OnLevelLoading;
+        EventManager.Instance.LevelLoaded -= OnLevelLoaded;
     }
 
     private void OnMoveInput(InputAction.CallbackContext context)
@@ -76,6 +81,16 @@ public class PlayerController : MonoBehaviour
 
         StartCoroutine("Lift");
         StartCoroutine("RandomRollSpin", targetRotation);
+    }
+
+    private void OnLevelLoading()
+    {
+        _playerInput.Disable();
+    }
+
+    private void OnLevelLoaded()
+    {
+        _playerInput.Enable();
     }
 
     IEnumerator RandomRollSpin(Vector3 targetRotation)

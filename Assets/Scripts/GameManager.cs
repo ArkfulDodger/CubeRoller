@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
     public Dice CurrentDice { get; private set; }
     [SerializeField] private TypeMaterials _defaultTypeMats;
     public TypeMaterials DefaultTypeMats { get { return _defaultTypeMats; } }
+    private int _levelHitsRemaining = 0;
 
     public static GameManager Instance { get; private set; }
 
@@ -37,12 +38,14 @@ public class GameManager : MonoBehaviour
     {
         EventManager.Instance.BadTileStep += OnBadTileStep;
         EventManager.Instance.LevelCleared += OnLevelCleared;
+        EventManager.Instance.LevelLoaded += OnLevelLoaded;
     }
 
     private void OnDisable()
     {
         EventManager.Instance.BadTileStep -= OnBadTileStep;
         EventManager.Instance.LevelCleared -= OnLevelCleared;
+        EventManager.Instance.LevelLoaded -= OnLevelLoaded;
     }
 
 
@@ -62,9 +65,18 @@ public class GameManager : MonoBehaviour
         CurrentDice.UpdateSideMapping();
     }
 
+    private void OnLevelLoaded()
+    {
+        GetCurrentLevel();
+        GetAndSetDice();
+    }
+
     private void OnBadTileStep()
     {
-        Debug.Log("Hit Bad Tile!");
+        if (_levelHitsRemaining < 1)
+            EventManager.Instance.LevelFailedHandler();
+        else
+            _levelHitsRemaining--;
     }
 
     private void OnLevelCleared()
