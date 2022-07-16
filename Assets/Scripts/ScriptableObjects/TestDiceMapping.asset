@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b71aa5fa793045848aded75e83f2c935, type: 3}
-  m_Name: DiceMapping00
+  m_Name: TestDiceMapping
   m_EditorClassIdentifier: 
   _side1Front: 1
-  _side2Top: 1
-  _side3Right: 2
-  _side4Left: 1
-  _side5Bottom: 1
-  _side6Back: 1
+  _side2Top: 2
+  _side3Right: 3
+  _side4Left: 4
+  _side5Bottom: 5
+  _side6Back: 6

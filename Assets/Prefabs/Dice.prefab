@@ -54,8 +54,8 @@ MonoBehaviour:
   _side2Top: {fileID: 7640609843301305684}
   _side3Right: {fileID: 5827169090835944486}
   _side4Left: {fileID: 5747978563344467787}
-  _side5Back: {fileID: 5002160216609516703}
-  _side6Bottom: {fileID: 8641321497211198577}
+  _side5Bottom: {fileID: 5002160216609516703}
+  _side6Back: {fileID: 8641321497211198577}
 --- !u!1001 &5540114696402256043
 PrefabInstance:
   m_ObjectHideFlags: 0

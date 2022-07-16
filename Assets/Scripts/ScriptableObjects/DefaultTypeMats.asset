@@ -19,3 +19,11 @@ MonoBehaviour:
     material: {fileID: 2100000, guid: 8e240328bd8b5d84f9a44996ad1444f1, type: 2}
   - type: 2
     material: {fileID: 2100000, guid: 74ad04e23e9aece4d857b8c5515c3aac, type: 2}
+  - type: 3
+    material: {fileID: 2100000, guid: 0e7795fee4c055741b93fb5300d53a55, type: 2}
+  - type: 4
+    material: {fileID: 2100000, guid: c30e056624de86b4485552c44850d4bc, type: 2}
+  - type: 5
+    material: {fileID: 2100000, guid: 951d4fc6580ba8c4c955dd7ddae56d8d, type: 2}
+  - type: 6
+    material: {fileID: 2100000, guid: 2b3411976faeda74a9eed9469d927bcb, type: 2}

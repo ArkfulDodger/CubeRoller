@@ -8,8 +8,8 @@ public class Dice : MonoBehaviour
     [SerializeField] private DiceSide _side2Top;
     [SerializeField] private DiceSide _side3Right;
     [SerializeField] private DiceSide _side4Left;
-    [SerializeField] private DiceSide _side5Back;
-    [SerializeField] private DiceSide _side6Bottom;
+    [SerializeField] private DiceSide _side5Bottom;
+    [SerializeField] private DiceSide _side6Back;
 
     private Dictionary<int, TileType> _currentSides;
 
@@ -20,7 +20,7 @@ public class Dice : MonoBehaviour
         _side2Top.SetType(_currentSides[2]);
         _side3Right.SetType(_currentSides[3]);
         _side4Left.SetType(_currentSides[4]);
-        _side5Back.SetType(_currentSides[5]);
-        _side6Bottom.SetType(_currentSides[6]);
+        _side5Bottom.SetType(_currentSides[5]);
+        _side6Back.SetType(_currentSides[6]);
     }
 }

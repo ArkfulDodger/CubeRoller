@@ -6,5 +6,9 @@ public enum TileType
 {
     Neutral,
     Red,
-    Blue
+    Blue,
+    Green,
+    Orange,
+    Purple,
+    Yellow
 }

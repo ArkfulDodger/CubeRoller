@@ -9,8 +9,8 @@ public class DiceSideMapping : ScriptableObject
     [SerializeField] private TileType _side2Top;
     [SerializeField] private TileType _side3Right;
     [SerializeField] private TileType _side4Left;
-    [SerializeField] private TileType _side5Back;
-    [SerializeField] private TileType _side6Bottom;
+    [SerializeField] private TileType _side5Bottom;
+    [SerializeField] private TileType _side6Back;
 
     public Dictionary<int, TileType> Sides
     {
@@ -21,8 +21,8 @@ public class DiceSideMapping : ScriptableObject
                 {2, _side2Top},
                 {3, _side3Right},
                 {4, _side4Left},
-                {5, _side5Back},
-                {6, _side6Bottom},
+                {5, _side5Bottom},
+                {6, _side6Back},
             };
         }
     }

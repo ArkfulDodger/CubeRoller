@@ -13,7 +13,25 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform _pivotPoint;
     private Vector3 _pivotAxis;
     [SerializeField] private GameObject _dice;
-    [SerializeField] private float _rollTime = 2f;
+    private float _rollTime = 0.2f;
+    private float _randomRollTime = 0.7f;
+    private float _randomRollHeight = 1f;
+    private float _randomRollLiftTime = 0.5f;
+    private float _randomRollLowerTime = 0.3f;
+    private float _randomRollPauseTime = 0.1f;
+    //private Vector3 _peekOffset = new Vector3(47.9f, 7.8f, 0f);
+
+
+    private Dictionary<int, Vector3> _vectorToLandOnDiceSide = new Dictionary<int, Vector3>()
+    {
+        {1, Vector3.forward * 90f},
+        {2, Vector3.forward * 180f},
+        {3, Vector3.left * 90f},
+        {4, Vector3.right * 90f},
+        {5, Vector3.forward * 360f},
+        {6, Vector3.back * 90f},
+
+    };
 
     private void Awake()
     {
@@ -25,13 +43,14 @@ public class PlayerController : MonoBehaviour
         _playerInput.Enable();
 
         _playerInput.CubeControl.Move.started += OnMoveInput;
+        _playerInput.CubeControl.Roll.started += OnRollInput;
     }
  
     private void OnDisable()
     {
         _playerInput.Disable();
 
-        _playerInput.CubeControl.Move.started -= OnMoveInput;
+        _playerInput.CubeControl.Roll.started -= OnRollInput;
     }
 
     private void OnMoveInput(InputAction.CallbackContext context)
@@ -47,6 +66,79 @@ public class PlayerController : MonoBehaviour
 
             AttemptMove(_moveDirection);
         }
+    }
+
+    private void OnRollInput(InputAction.CallbackContext context)
+    {
+        int sideToLandOn = UnityEngine.Random.Range(1, 7);
+        Vector3 yRotation = Vector3.up * (90f * UnityEngine.Random.Range(0, 4));
+        Vector3 targetRotation = _vectorToLandOnDiceSide[sideToLandOn] + yRotation;
+
+        StartCoroutine("Lift");
+        StartCoroutine("RandomRollSpin", targetRotation);
+    }
+
+    IEnumerator RandomRollSpin(Vector3 targetRotation)
+    {
+        Vector3 startingRotation = _dice.transform.rotation.eulerAngles;
+        Vector3 fullRotation;
+        fullRotation.x = targetRotation.x != 0 ? targetRotation.x + UnityEngine.Random.Range(3, 5) * 360f : 0f;
+        fullRotation.y = targetRotation.y + 360f;
+        fullRotation.z = targetRotation.z != 0 ? targetRotation.z + UnityEngine.Random.Range(3, 5) * 360f : 0f;
+
+        float time = 0f;
+        while (time < _randomRollTime)
+        {
+            float progress = time / _randomRollTime;
+            _dice.transform.localEulerAngles = Vector3.Lerp(startingRotation, fullRotation, Mathf.SmoothStep(0f, 1f, progress));
+
+            yield return null;
+            time += Time.deltaTime;
+        }
+        _dice.transform.localEulerAngles = fullRotation;
+        yield return new WaitForSeconds(_randomRollPauseTime);
+
+        StartCoroutine("Lower");
+        yield return null;
+    }
+
+    IEnumerator Lift()
+    {
+        _playerInput.Disable();
+
+        Vector3 startPos = _dice.transform.localPosition;
+        Vector3 targetPos = startPos + Vector3.up * _randomRollHeight;
+        float time = 0f;
+        while (time < _randomRollLiftTime)
+        {
+            float progress = time / _randomRollLiftTime;
+            _dice.transform.localPosition = Vector3.Lerp(startPos, targetPos, Mathf.SmoothStep(0f, 1f, progress));
+
+            yield return null;
+            time += Time.deltaTime;
+        }
+        _dice.transform.localPosition = targetPos;
+        yield return null;
+    }
+
+    IEnumerator Lower()
+    {
+        Vector3 startPos = _dice.transform.localPosition;
+        Vector3 targetPos = _defaultChildPosition;
+        float time = 0f;
+        while (time < _randomRollLowerTime)
+        {
+            float progress = time / _randomRollLowerTime;
+            _dice.transform.localPosition = Vector3.Lerp(startPos, targetPos, Mathf.SmoothStep(0f, 1f, progress));
+
+            yield return null;
+            time += Time.deltaTime;
+        }
+        _dice.transform.localPosition = targetPos;
+
+        _playerInput.Enable();
+        yield return null;
+
     }
 
     private bool InputIsUnambiguous(Vector2 moveInput)
@@ -74,13 +166,6 @@ public class PlayerController : MonoBehaviour
         _pivotAxis = move.z != 0 ? Vector3.right : Vector3.forward;
 
         StartCoroutine("RollToNextSide");
-
-
-        //_pivotPoint.localRotation = Quaternion.LookRotation(move, Vector3.up);
-        //float targetAngle = (_moveInput.x > 0 || _moveInput.y < 0) ? -90f : 90f;
-        //_dice.transform.RotateAround(_pivotPoint, _pivotAxis, targetAngle);
-
-        
     }
 
     private void MovePlayerAndResetDicePosition()
@@ -118,5 +203,7 @@ public class PlayerController : MonoBehaviour
         _playerInput.Enable();
         yield return null;
     }
+
+
 
 }

@@ -28,42 +28,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
             ""id"": ""e9f4757c-61fe-4ace-8cbf-db09ef3fa07d"",
             ""actions"": [
                 {
-                    ""name"": ""MoveNorth"",
-                    ""type"": ""Button"",
-                    ""id"": ""645451ee-1c4c-422c-9658-636414703c9d"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""MoveSouth"",
-                    ""type"": ""Button"",
-                    ""id"": ""68c75b9e-7194-4f5b-bc4c-4f3968365a73"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""MoveWest"",
-                    ""type"": ""Button"",
-                    ""id"": ""9c6af88f-f1a0-473c-b612-43a697be93dc"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""MoveEast"",
-                    ""type"": ""Button"",
-                    ""id"": ""cba11261-4118-45ac-a601-d9e06af5e964"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""Move"",
                     ""type"": ""Value"",
                     ""id"": ""36696546-4536-4e16-9199-f7c111a1443a"",
@@ -71,97 +35,18 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Roll"",
+                    ""type"": ""Button"",
+                    ""id"": ""c4188b83-3b1f-4eca-82c5-a9192c910b5e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
-                {
-                    ""name"": """",
-                    ""id"": ""a1aec9ce-c6c9-4a1f-a8f8-bea3e4b31773"",
-                    ""path"": ""<Keyboard>/w"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""MoveNorth"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""83a96535-8c36-4f3e-b1f2-ee65efdd9acf"",
-                    ""path"": ""<Keyboard>/upArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""MoveNorth"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""60314b15-86ac-456f-9fa7-d514c2d122bd"",
-                    ""path"": ""<Keyboard>/s"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""MoveSouth"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""3c079aeb-3928-4527-b180-27b4953be0ad"",
-                    ""path"": ""<Keyboard>/downArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""MoveSouth"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""0c047448-b2ff-4c2a-88dc-46760aef9388"",
-                    ""path"": ""<Keyboard>/a"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""MoveWest"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""995dc8cf-7e6d-439c-ba74-83f2521c3f28"",
-                    ""path"": ""<Keyboard>/leftArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""MoveWest"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""bdb96a30-1a69-4405-aec8-1f6f5d4f9167"",
-                    ""path"": ""<Keyboard>/d"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""MoveEast"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""cff37291-7b4b-4851-a1db-ed846f8405f2"",
-                    ""path"": ""<Keyboard>/rightArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""MoveEast"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
                 {
                     ""name"": ""WASD"",
                     ""id"": ""eb0dd010-f54d-4881-9e18-d179fe2ecdb7"",
@@ -271,6 +156,17 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""861aee52-c429-40ce-8140-f5b4b724b265"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Roll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -279,11 +175,8 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
 }");
         // CubeControl
         m_CubeControl = asset.FindActionMap("CubeControl", throwIfNotFound: true);
-        m_CubeControl_MoveNorth = m_CubeControl.FindAction("MoveNorth", throwIfNotFound: true);
-        m_CubeControl_MoveSouth = m_CubeControl.FindAction("MoveSouth", throwIfNotFound: true);
-        m_CubeControl_MoveWest = m_CubeControl.FindAction("MoveWest", throwIfNotFound: true);
-        m_CubeControl_MoveEast = m_CubeControl.FindAction("MoveEast", throwIfNotFound: true);
         m_CubeControl_Move = m_CubeControl.FindAction("Move", throwIfNotFound: true);
+        m_CubeControl_Roll = m_CubeControl.FindAction("Roll", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -343,20 +236,14 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     // CubeControl
     private readonly InputActionMap m_CubeControl;
     private ICubeControlActions m_CubeControlActionsCallbackInterface;
-    private readonly InputAction m_CubeControl_MoveNorth;
-    private readonly InputAction m_CubeControl_MoveSouth;
-    private readonly InputAction m_CubeControl_MoveWest;
-    private readonly InputAction m_CubeControl_MoveEast;
     private readonly InputAction m_CubeControl_Move;
+    private readonly InputAction m_CubeControl_Roll;
     public struct CubeControlActions
     {
         private @PlayerControls m_Wrapper;
         public CubeControlActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
-        public InputAction @MoveNorth => m_Wrapper.m_CubeControl_MoveNorth;
-        public InputAction @MoveSouth => m_Wrapper.m_CubeControl_MoveSouth;
-        public InputAction @MoveWest => m_Wrapper.m_CubeControl_MoveWest;
-        public InputAction @MoveEast => m_Wrapper.m_CubeControl_MoveEast;
         public InputAction @Move => m_Wrapper.m_CubeControl_Move;
+        public InputAction @Roll => m_Wrapper.m_CubeControl_Roll;
         public InputActionMap Get() { return m_Wrapper.m_CubeControl; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -366,50 +253,29 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         {
             if (m_Wrapper.m_CubeControlActionsCallbackInterface != null)
             {
-                @MoveNorth.started -= m_Wrapper.m_CubeControlActionsCallbackInterface.OnMoveNorth;
-                @MoveNorth.performed -= m_Wrapper.m_CubeControlActionsCallbackInterface.OnMoveNorth;
-                @MoveNorth.canceled -= m_Wrapper.m_CubeControlActionsCallbackInterface.OnMoveNorth;
-                @MoveSouth.started -= m_Wrapper.m_CubeControlActionsCallbackInterface.OnMoveSouth;
-                @MoveSouth.performed -= m_Wrapper.m_CubeControlActionsCallbackInterface.OnMoveSouth;
-                @MoveSouth.canceled -= m_Wrapper.m_CubeControlActionsCallbackInterface.OnMoveSouth;
-                @MoveWest.started -= m_Wrapper.m_CubeControlActionsCallbackInterface.OnMoveWest;
-                @MoveWest.performed -= m_Wrapper.m_CubeControlActionsCallbackInterface.OnMoveWest;
-                @MoveWest.canceled -= m_Wrapper.m_CubeControlActionsCallbackInterface.OnMoveWest;
-                @MoveEast.started -= m_Wrapper.m_CubeControlActionsCallbackInterface.OnMoveEast;
-                @MoveEast.performed -= m_Wrapper.m_CubeControlActionsCallbackInterface.OnMoveEast;
-                @MoveEast.canceled -= m_Wrapper.m_CubeControlActionsCallbackInterface.OnMoveEast;
                 @Move.started -= m_Wrapper.m_CubeControlActionsCallbackInterface.OnMove;
                 @Move.performed -= m_Wrapper.m_CubeControlActionsCallbackInterface.OnMove;
                 @Move.canceled -= m_Wrapper.m_CubeControlActionsCallbackInterface.OnMove;
+                @Roll.started -= m_Wrapper.m_CubeControlActionsCallbackInterface.OnRoll;
+                @Roll.performed -= m_Wrapper.m_CubeControlActionsCallbackInterface.OnRoll;
+                @Roll.canceled -= m_Wrapper.m_CubeControlActionsCallbackInterface.OnRoll;
             }
             m_Wrapper.m_CubeControlActionsCallbackInterface = instance;
             if (instance != null)
             {
-                @MoveNorth.started += instance.OnMoveNorth;
-                @MoveNorth.performed += instance.OnMoveNorth;
-                @MoveNorth.canceled += instance.OnMoveNorth;
-                @MoveSouth.started += instance.OnMoveSouth;
-                @MoveSouth.performed += instance.OnMoveSouth;
-                @MoveSouth.canceled += instance.OnMoveSouth;
-                @MoveWest.started += instance.OnMoveWest;
-                @MoveWest.performed += instance.OnMoveWest;
-                @MoveWest.canceled += instance.OnMoveWest;
-                @MoveEast.started += instance.OnMoveEast;
-                @MoveEast.performed += instance.OnMoveEast;
-                @MoveEast.canceled += instance.OnMoveEast;
                 @Move.started += instance.OnMove;
                 @Move.performed += instance.OnMove;
                 @Move.canceled += instance.OnMove;
+                @Roll.started += instance.OnRoll;
+                @Roll.performed += instance.OnRoll;
+                @Roll.canceled += instance.OnRoll;
             }
         }
     }
     public CubeControlActions @CubeControl => new CubeControlActions(this);
     public interface ICubeControlActions
     {
-        void OnMoveNorth(InputAction.CallbackContext context);
-        void OnMoveSouth(InputAction.CallbackContext context);
-        void OnMoveWest(InputAction.CallbackContext context);
-        void OnMoveEast(InputAction.CallbackContext context);
         void OnMove(InputAction.CallbackContext context);
+        void OnRoll(InputAction.CallbackContext context);
     }
 }
