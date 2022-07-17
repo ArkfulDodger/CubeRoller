@@ -12,14 +12,26 @@ public class PlayerController : MonoBehaviour
     private Vector3 _moveDirection;
     [SerializeField] private Transform _pivotPoint;
     private Vector3 _pivotAxis;
-    [SerializeField] private GameObject _dice;
+    [SerializeField] private Transform _dice;
+
+    // Move Variables
     private float _rollTime = 0.2f;
+
+    // Random Roll Variables
     private float _randomRollTime = 0.7f;
     private float _randomRollHeight = 1f;
     private float _randomRollLiftTime = 0.5f;
-    private float _randomRollLowerTime = 0.3f;
+    private float _randomRollLowerTime = 0.2f;
     private float _randomRollPauseTime = 0.1f;
-    //private Vector3 _peekOffset = new Vector3(47.9f, 7.8f, 0f);
+
+    // Jump/Flip variables
+    private bool _isFlipping;
+    private float _flipTime = 0.2f;
+    private bool _isJumping;
+    private float _jumpHeight = 1f;
+    private float _jumpLiftTime = 0.2f;
+    private float _jumpPauseTime = 0.2f;
+    private float _jumpLowerTime = 0.2f;
 
 
     private Dictionary<int, Vector3> _vectorToLandOnDiceSide = new Dictionary<int, Vector3>()
@@ -44,6 +56,7 @@ public class PlayerController : MonoBehaviour
 
         _playerInput.CubeControl.Move.started += OnMoveInput;
         _playerInput.CubeControl.Roll.started += OnRollInput;
+        _playerInput.CubeControl.Jump.started += OnJumpInput;
         EventManager.Instance.LevelLoading += OnLevelLoading;
         EventManager.Instance.LevelLoaded += OnLevelLoaded;
     }
@@ -54,12 +67,16 @@ public class PlayerController : MonoBehaviour
 
         _playerInput.CubeControl.Move.started -= OnMoveInput;
         _playerInput.CubeControl.Roll.started -= OnRollInput;
+        _playerInput.CubeControl.Jump.started -= OnJumpInput;
         EventManager.Instance.LevelLoading -= OnLevelLoading;
         EventManager.Instance.LevelLoaded -= OnLevelLoaded;
     }
 
     private void OnMoveInput(InputAction.CallbackContext context)
     {
+        if (_playerInput.CubeControl.Jump.triggered)
+            _isJumping = true;
+
         // get the vector 2 of the move input
         _moveInput = context.ReadValue<Vector2>();
 
@@ -69,18 +86,33 @@ public class PlayerController : MonoBehaviour
             _moveDirection.y = 0;
             _moveDirection.z = _moveInput.y;
 
-            AttemptMove(_moveDirection);
+            if (_isJumping)
+                Flip(_moveDirection);
+            else
+                AttemptMove(_moveDirection);
         }
+    }
+
+    private void OnJumpInput(InputAction.CallbackContext context)
+    {
+        if (_isJumping)
+            return;
+        else
+            _isJumping = true;
+
+        StartCoroutine("JumpLift");
     }
 
     private void OnRollInput(InputAction.CallbackContext context)
     {
+        if (_isJumping) return;
+
         int sideToLandOn = UnityEngine.Random.Range(1, 7);
         Vector3 yRotation = Vector3.up * (90f * UnityEngine.Random.Range(0, 4));
         Vector3 targetRotation = _vectorToLandOnDiceSide[sideToLandOn] + yRotation;
 
-        StartCoroutine("Lift");
-        StartCoroutine("RandomRollSpin", targetRotation);
+        StartCoroutine("RollLift");
+        StartCoroutine("RollSpin", targetRotation);
     }
 
     private void OnLevelLoading()
@@ -93,9 +125,9 @@ public class PlayerController : MonoBehaviour
         _playerInput.Enable();
     }
 
-    IEnumerator RandomRollSpin(Vector3 targetRotation)
+    IEnumerator RollSpin(Vector3 targetRotation)
     {
-        Vector3 startingRotation = _dice.transform.rotation.eulerAngles;
+        Vector3 startingRotation = _dice.rotation.eulerAngles;
         Vector3 fullRotation;
         fullRotation.x = targetRotation.x != 0 ? targetRotation.x + UnityEngine.Random.Range(3, 5) * 360f : 0f;
         fullRotation.y = targetRotation.y + 360f;
@@ -105,55 +137,100 @@ public class PlayerController : MonoBehaviour
         while (time < _randomRollTime)
         {
             float progress = time / _randomRollTime;
-            _dice.transform.localEulerAngles = Vector3.Lerp(startingRotation, fullRotation, Mathf.SmoothStep(0f, 1f, progress));
+            _dice.localEulerAngles = Vector3.Lerp(startingRotation, fullRotation, Mathf.SmoothStep(0f, 1f, progress));
 
             yield return null;
             time += Time.deltaTime;
         }
-        _dice.transform.localEulerAngles = fullRotation;
+        _dice.localEulerAngles = fullRotation;
         yield return new WaitForSeconds(_randomRollPauseTime);
 
-        StartCoroutine("Lower");
+        StartCoroutine("RollLower");
         yield return null;
     }
 
-    IEnumerator Lift()
+    IEnumerator JumpLift()
+    {
+        Vector3 startPos = _dice.localPosition;
+        Vector3 targetPos = startPos + Vector3.up * _jumpHeight;
+        float time = 0f;
+        while (time < _jumpLiftTime)
+        {
+            float progress = time / _jumpLiftTime;
+            _dice.localPosition = Vector3.Lerp(startPos, targetPos, Mathf.SmoothStep(0f, 1f, progress));
+
+            yield return null;
+            time += Time.deltaTime;
+        }
+        _dice.localPosition = targetPos;
+
+        if (!_isFlipping)
+            yield return new WaitForSeconds(_jumpPauseTime);
+
+        while (_isFlipping)
+            yield return null;
+
+        StartCoroutine("JumpLower");
+    }
+
+    IEnumerator JumpLower()
     {
         _playerInput.Disable();
 
-        Vector3 startPos = _dice.transform.localPosition;
+        Vector3 startPos = _dice.localPosition;
+        Vector3 targetPos = _defaultChildPosition;
+        float time = 0f;
+        while (time < _jumpLowerTime)
+        {
+            float progress = time / _jumpLowerTime;
+            _dice.localPosition = Vector3.Lerp(startPos, targetPos, Mathf.SmoothStep(0f, 1f, progress));
+
+            yield return null;
+            time += Time.deltaTime;
+        }
+        _dice.localPosition = targetPos;
+
+        _isJumping = false;
+        _playerInput.Enable();
+        yield return null;
+    }
+
+    IEnumerator RollLift()
+    {
+        _playerInput.Disable();
+
+        Vector3 startPos = _dice.localPosition;
         Vector3 targetPos = startPos + Vector3.up * _randomRollHeight;
         float time = 0f;
         while (time < _randomRollLiftTime)
         {
             float progress = time / _randomRollLiftTime;
-            _dice.transform.localPosition = Vector3.Lerp(startPos, targetPos, Mathf.SmoothStep(0f, 1f, progress));
+            _dice.localPosition = Vector3.Lerp(startPos, targetPos, Mathf.SmoothStep(0f, 1f, progress));
 
             yield return null;
             time += Time.deltaTime;
         }
-        _dice.transform.localPosition = targetPos;
+        _dice.localPosition = targetPos;
         yield return null;
     }
 
-    IEnumerator Lower()
+    IEnumerator RollLower()
     {
-        Vector3 startPos = _dice.transform.localPosition;
+        Vector3 startPos = _dice.localPosition;
         Vector3 targetPos = _defaultChildPosition;
         float time = 0f;
         while (time < _randomRollLowerTime)
         {
             float progress = time / _randomRollLowerTime;
-            _dice.transform.localPosition = Vector3.Lerp(startPos, targetPos, Mathf.SmoothStep(0f, 1f, progress));
+            _dice.localPosition = Vector3.Lerp(startPos, targetPos, Mathf.SmoothStep(0f, 1f, progress));
 
             yield return null;
             time += Time.deltaTime;
         }
-        _dice.transform.localPosition = targetPos;
+        _dice.localPosition = targetPos;
 
         _playerInput.Enable();
         yield return null;
-
     }
 
     private bool InputIsUnambiguous(Vector2 moveInput)
@@ -183,14 +260,50 @@ public class PlayerController : MonoBehaviour
         StartCoroutine("RollToNextSide");
     }
 
+    private void Flip(Vector3 moveDirection)
+    {
+        _pivotPoint.localPosition = _defaultChildPosition;
+        _pivotAxis = moveDirection.z != 0 ? Vector3.right : Vector3.forward;
+
+        StartCoroutine("FlipToNextSide");
+    }
+
     private void MovePlayerAndResetDicePosition()
     {
         transform.position += _moveDirection.normalized;
         _pivotPoint.localPosition = _defaultChildPosition;
-        _dice.transform.localPosition = _defaultChildPosition;
+        _dice.localPosition = _defaultChildPosition;
     }
 
-    
+    IEnumerator FlipToNextSide()
+    {
+        _playerInput.Disable();
+        _isFlipping = true;
+
+        float multiplier = (_moveInput.x > 0 || _moveInput.y < 0) ? -1f : 1f;
+
+        float angleProgress = 0f;
+        float time = 0f;
+        while (time < _flipTime)
+        {
+            float targetRotation = Mathf.Lerp(0f, 90f * multiplier, time / _flipTime);
+            float thisRotation = targetRotation - angleProgress;
+            _dice.Rotate(thisRotation * _pivotAxis, Space.World);
+
+            angleProgress = targetRotation;
+
+            yield return null;
+
+            time += Time.deltaTime;
+        }
+
+        float finalRotation = 90f * multiplier - angleProgress;
+        _dice.Rotate(finalRotation * _pivotAxis, Space.World);
+
+        _isFlipping = false;
+        yield return null;
+    }    
+
     IEnumerator RollToNextSide()
     {
         _playerInput.Disable();
@@ -203,7 +316,7 @@ public class PlayerController : MonoBehaviour
         {
             float targetRotation = Mathf.Lerp(0f, 90f * multiplier, time / _rollTime);
             float thisRotation = targetRotation - angleProgress;
-            _dice.transform.RotateAround(_pivotPoint.position, _pivotAxis, thisRotation);
+            _dice.RotateAround(_pivotPoint.position, _pivotAxis, thisRotation);
 
             angleProgress = targetRotation;
 
@@ -213,12 +326,10 @@ public class PlayerController : MonoBehaviour
         }
 
         float finalRotation = 90f * multiplier - angleProgress;
-        _dice.transform.RotateAround(_pivotPoint.position, _pivotAxis, finalRotation);
+        _dice.RotateAround(_pivotPoint.position, _pivotAxis, finalRotation);
+
         MovePlayerAndResetDicePosition();
         _playerInput.Enable();
         yield return null;
     }
-
-
-
 }

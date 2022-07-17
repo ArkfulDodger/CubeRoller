@@ -271,6 +271,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b9939905e35a8214a8e5f8a6b9e8a4bf, type: 3}
+--- !u!4 &518855914 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3507690708138980082, guid: d57e6026a62950b468ca44379d9b36d2, type: 3}
+  m_PrefabInstance: {fileID: 3507690706862903716}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &602169311 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4886103512637890908, guid: b9939905e35a8214a8e5f8a6b9e8a4bf, type: 3}
@@ -1076,10 +1081,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3507690708138980082, guid: d57e6026a62950b468ca44379d9b36d2, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3507690708924064229, guid: d57e6026a62950b468ca44379d9b36d2, type: 3}
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 3507690708924064230, guid: d57e6026a62950b468ca44379d9b36d2, type: 3}
+      propertyPath: _dice
+      value: 
+      objectReference: {fileID: 518855914}
     - target: {fileID: 3507690708924064231, guid: d57e6026a62950b468ca44379d9b36d2, type: 3}
       propertyPath: m_RootOrder
       value: 8

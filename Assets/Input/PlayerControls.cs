@@ -44,6 +44,15 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Jump"",
+                    ""type"": ""Button"",
+                    ""id"": ""dd4ca109-5cc3-4410-bea7-37275b9d9feb"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -189,6 +198,17 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""action"": ""Roll"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""92eb8609-f4d8-428f-a3d4-c803edbff5fa"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -199,6 +219,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_CubeControl = asset.FindActionMap("CubeControl", throwIfNotFound: true);
         m_CubeControl_Move = m_CubeControl.FindAction("Move", throwIfNotFound: true);
         m_CubeControl_Roll = m_CubeControl.FindAction("Roll", throwIfNotFound: true);
+        m_CubeControl_Jump = m_CubeControl.FindAction("Jump", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -260,12 +281,14 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private ICubeControlActions m_CubeControlActionsCallbackInterface;
     private readonly InputAction m_CubeControl_Move;
     private readonly InputAction m_CubeControl_Roll;
+    private readonly InputAction m_CubeControl_Jump;
     public struct CubeControlActions
     {
         private @PlayerControls m_Wrapper;
         public CubeControlActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_CubeControl_Move;
         public InputAction @Roll => m_Wrapper.m_CubeControl_Roll;
+        public InputAction @Jump => m_Wrapper.m_CubeControl_Jump;
         public InputActionMap Get() { return m_Wrapper.m_CubeControl; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -281,6 +304,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @Roll.started -= m_Wrapper.m_CubeControlActionsCallbackInterface.OnRoll;
                 @Roll.performed -= m_Wrapper.m_CubeControlActionsCallbackInterface.OnRoll;
                 @Roll.canceled -= m_Wrapper.m_CubeControlActionsCallbackInterface.OnRoll;
+                @Jump.started -= m_Wrapper.m_CubeControlActionsCallbackInterface.OnJump;
+                @Jump.performed -= m_Wrapper.m_CubeControlActionsCallbackInterface.OnJump;
+                @Jump.canceled -= m_Wrapper.m_CubeControlActionsCallbackInterface.OnJump;
             }
             m_Wrapper.m_CubeControlActionsCallbackInterface = instance;
             if (instance != null)
@@ -291,6 +317,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @Roll.started += instance.OnRoll;
                 @Roll.performed += instance.OnRoll;
                 @Roll.canceled += instance.OnRoll;
+                @Jump.started += instance.OnJump;
+                @Jump.performed += instance.OnJump;
+                @Jump.canceled += instance.OnJump;
             }
         }
     }
@@ -299,5 +328,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     {
         void OnMove(InputAction.CallbackContext context);
         void OnRoll(InputAction.CallbackContext context);
+        void OnJump(InputAction.CallbackContext context);
     }
 }
