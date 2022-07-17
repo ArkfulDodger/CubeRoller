@@ -16,6 +16,14 @@ public class GameManager : MonoBehaviour
     public Dice CurrentDice { get; private set; }
     [SerializeField] private TypeMaterials _defaultTypeMats;
     public TypeMaterials DefaultTypeMats { get { return _defaultTypeMats; } }
+
+    // Audio Components
+    [SerializeField] private AudioSource _musicAudioSource;
+    [SerializeField] private AudioSource _sfxAudioSource;
+    [SerializeField] private SFXController _sfxController;
+
+
+    // Game Variables
     private int _levelHitsRemaining = 0;
     private int _levelNum;
     public int LevelNum { get { return _levelNum; } }

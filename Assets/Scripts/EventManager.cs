@@ -44,5 +44,24 @@ public class EventManager : MonoBehaviour
     public event Action LevelFailed;
     public void LevelFailedHandler() { LevelFailed?.Invoke(); }
 
+    // Lost Level
+    public event Action DiceClacked;
+    public void DiceClackedHandler() { DiceClacked?.Invoke(); }
+
+    // Lost Level
+    public event Action Jumped;
+    public void JumpedHandler() { Jumped?.Invoke(); }
+    
+    // Lost Level
+    public event Action Flipped;
+    public void FlippedHandler() { Flipped?.Invoke(); }
+    
+    // Lost Level
+    public event Action RandomRolled;
+    public void RandomRolledHandler() { RandomRolled?.Invoke(); }
+        
+    // Lost Level
+    public event Action StartingGame;
+    public void StartingGameHandler() { StartingGame?.Invoke(); }
 
 }

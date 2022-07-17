@@ -35,12 +35,14 @@ public class LevelManager : MonoBehaviour
     {
         EventManager.Instance.LevelFailed += OnLevelFailed;
         EventManager.Instance.LevelCleared += OnLevelCleared;
+        EventManager.Instance.StartingGame += OnStartingGame;
     }
 
     private void OnDisable()
     {
         EventManager.Instance.LevelFailed -= OnLevelFailed;
         EventManager.Instance.LevelCleared -= OnLevelCleared;
+        EventManager.Instance.StartingGame -= OnStartingGame;
     }
 
     // Loads a new Scene
@@ -101,6 +103,12 @@ public class LevelManager : MonoBehaviour
         }
         else
             Debug.Log("No More Levels in Build.");
+    }
+    private void OnStartingGame()
+    {
+        string nextScenePath = SceneUtility.GetScenePathByBuildIndex(1);
+        string nextSceneName = GetSceneNameFromScenePath(nextScenePath);
+        LoadScene(nextSceneName);
     }
 
     private string GetSceneNameFromScenePath(string scenePath)

@@ -100,6 +100,7 @@ public class PlayerController : MonoBehaviour
         else
             _isJumping = true;
 
+        EventManager.Instance.JumpedHandler();
         StartCoroutine("JumpLift");
     }
 
@@ -110,6 +111,8 @@ public class PlayerController : MonoBehaviour
         int sideToLandOn = UnityEngine.Random.Range(1, 7);
         Vector3 yRotation = Vector3.up * (90f * UnityEngine.Random.Range(0, 4));
         Vector3 targetRotation = _vectorToLandOnDiceSide[sideToLandOn] + yRotation;
+
+        EventManager.Instance.RandomRolledHandler();
 
         StartCoroutine("RollLift");
         StartCoroutine("RollSpin", targetRotation);
@@ -175,6 +178,8 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator JumpLower()
     {
+        EventManager.Instance.DiceClackedHandler();
+
         _playerInput.Disable();
 
         Vector3 startPos = _dice.localPosition;
@@ -192,6 +197,8 @@ public class PlayerController : MonoBehaviour
 
         _isJumping = false;
         _playerInput.Enable();
+
+
         yield return null;
     }
 
@@ -216,6 +223,8 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator RollLower()
     {
+        EventManager.Instance.DiceClackedHandler();
+
         Vector3 startPos = _dice.localPosition;
         Vector3 targetPos = _defaultChildPosition;
         float time = 0f;
@@ -230,6 +239,8 @@ public class PlayerController : MonoBehaviour
         _dice.localPosition = targetPos;
 
         _playerInput.Enable();
+
+
         yield return null;
     }
 
@@ -264,6 +275,8 @@ public class PlayerController : MonoBehaviour
     {
         _pivotPoint.localPosition = _defaultChildPosition;
         _pivotAxis = moveDirection.z != 0 ? Vector3.right : Vector3.forward;
+
+        EventManager.Instance.FlippedHandler();
 
         StartCoroutine("FlipToNextSide");
     }
@@ -306,6 +319,8 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator RollToNextSide()
     {
+        EventManager.Instance.DiceClackedHandler();
+
         _playerInput.Disable();
 
         float multiplier = (_moveInput.x > 0 || _moveInput.y < 0) ? -1f : 1f;
@@ -327,6 +342,7 @@ public class PlayerController : MonoBehaviour
 
         float finalRotation = 90f * multiplier - angleProgress;
         _dice.RotateAround(_pivotPoint.position, _pivotAxis, finalRotation);
+
 
         MovePlayerAndResetDicePosition();
         _playerInput.Enable();
