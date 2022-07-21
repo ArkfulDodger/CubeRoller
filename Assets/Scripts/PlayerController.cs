@@ -25,6 +25,7 @@ public class PlayerController : MonoBehaviour
     private float _randomRollPauseTime = 0.1f;
 
     // Jump/Flip variables
+    [SerializeField] private bool _canJump = true;
     private bool _isFlipping;
     private float _flipTime = 0.2f;
     private bool _isJumping;
@@ -59,6 +60,8 @@ public class PlayerController : MonoBehaviour
         _playerInput.CubeControl.Jump.started += OnJumpInput;
         EventManager.Instance.LevelLoading += OnLevelLoading;
         EventManager.Instance.LevelLoaded += OnLevelLoaded;
+        EventManager.Instance.EnteringNeutralTile += OnEnteringNeutralTile;
+        EventManager.Instance.EnteringColorTile += OnEnteringColorTile;
     }
  
     private void OnDisable()
@@ -70,6 +73,8 @@ public class PlayerController : MonoBehaviour
         _playerInput.CubeControl.Jump.started -= OnJumpInput;
         EventManager.Instance.LevelLoading -= OnLevelLoading;
         EventManager.Instance.LevelLoaded -= OnLevelLoaded;
+        EventManager.Instance.EnteringNeutralTile -= OnEnteringNeutralTile;
+        EventManager.Instance.EnteringColorTile -= OnEnteringColorTile;
     }
 
     private void OnMoveInput(InputAction.CallbackContext context)
@@ -95,7 +100,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnJumpInput(InputAction.CallbackContext context)
     {
-        if (_isJumping)
+        if (_isJumping || !_canJump)
             return;
         else
             _isJumping = true;
@@ -126,6 +131,16 @@ public class PlayerController : MonoBehaviour
     private void OnLevelLoaded()
     {
         _playerInput.Enable();
+    }
+
+    private void OnEnteringNeutralTile()
+    {
+        _canJump = true;
+    }
+
+    private void OnEnteringColorTile()
+    {
+        _canJump = false;
     }
 
     IEnumerator RollSpin(Vector3 targetRotation)

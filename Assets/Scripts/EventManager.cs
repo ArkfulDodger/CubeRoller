@@ -62,6 +62,14 @@ public class EventManager : MonoBehaviour
         
     // Lost Level
     public event Action StartingGame;
-    public void StartingGameHandler() { StartingGame?.Invoke(); }
+    public void StartingGameHandler() { StartingGame?.Invoke(); }     
+    
+    // Lost Level
+    public event Action EnteringNeutralTile;
+    public void EnteringNeutralTileHandler() { EnteringNeutralTile?.Invoke(); }      
+    
+    // Lost Level
+    public event Action EnteringColorTile;
+    public void EnteringColorTileHandler() { EnteringColorTile?.Invoke(); }
 
 }

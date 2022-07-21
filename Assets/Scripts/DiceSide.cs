@@ -39,8 +39,9 @@ public class DiceSide : MonoBehaviour
         // chack for success
         else if (isMatch && tile.IsEnd)
             EventManager.Instance.LevelClearedHandler();
-        //// confirm safe
-        //else
-        //    Debug.Log("Safe");
+        else if (tile.Type == TileType.Neutral)
+            EventManager.Instance.EnteringNeutralTileHandler();
+        else
+            EventManager.Instance.EnteringColorTileHandler();
     }
 }
